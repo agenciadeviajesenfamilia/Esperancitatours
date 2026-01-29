@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMINA | Viajes de Alta Gama</title>
+    <meta name="description" content="Agencia de viajes de lujo curada para el viajero exigente.">
+    
+    <!-- Google Fonts: Playfair Display (Lujo/Editorial) & Lato (Minimalismo/Lectura) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN para prototipado rápido y eficiente) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración personalizada de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'lumina-gold': '#D4AF37',
+                        'lumina-dark': '#0F172A',
+                        'lumina-cream': '#F9F8F6',
+                        'lumina-grey': '#64748B',
+                    },
+                    fontFamily: {
+                        sans: ['Lato', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.2)), url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Estilos personalizados para animaciones y detalles finos */
+        body {
+            background-color: #F9F8F6;
+            color: #0F172A;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Efecto de subrayado elegante en hover */
+        .hover-underline-animation {
+            display: inline-block;
+            position: relative;
+            color: currentColor;
+        }
+
+        .hover-underline-animation::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: currentColor;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        .hover-underline-animation:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Ocultar barra de scroll pero permitir scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-lumina-gold selection:text-white">
+
+    <!-- Navegación -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 text-white bg-transparent">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            
+            <!-- Logo SVG Personalizado -->
+            <a href="#" class="flex items-center gap-3 group">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="transition-transform group-hover:rotate-45 duration-500">
+                    <path d="M20 0L24.49 15.51L40 20L24.49 24.49L20 40L15.51 24.49L0 20L15.51 15.51L20 0Z" fill="currentColor"/>
+                </svg>
+                <span class="text-2xl font-serif tracking-widest font-semibold">LUMINA</span>
+            </a>
+
+            <!-- Menú Desktop -->
+            <nav class="hidden md:flex space-x-12 text-sm tracking-widest uppercase font-light">
+                <div class="group relative py-2">
+                    <a href="#destinos" class="hover-underline-animation">Destinos</a>
+                    <!-- Submenú Simple -->
+                    <div class="absolute top-full left-0 mt-2 w-48 bg-white text-lumina-dark shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                        <a href="#" class="block px-6 py-3 hover:bg-gray-50 hover:text-lumina-gold transition-colors">Europa</a>
+                        <a href="#" class="block px-6 py-3 hover:bg-gray-50 hover:text-lumina-gold transition-colors">Asia Pacífico</a>
+                        <a href="#" class="block px-6 py-3 hover:bg-gray-50 hover:text-lumina-gold transition-colors">Caribe Privado</a>
+                    </div>
+                </div>
+                <a href="#experiencias" class="hover-underline-animation py-2">Experiencias</a>
+                <a href="#concierge" class="hover-underline-animation py-2">Concierge</a>
+                <a href="#journal" class="hover-underline-animation py-2">Journal</a>
+            </nav>
+
+            <!-- CTA Button -->
+            <a href="#contacto" class="hidden md:inline-block border border-current px-8 py-2 text-xs uppercase tracking-widest hover:bg-white hover:text-lumina-dark transition-all duration-300">
+                Diseñar Viaje
+            </a>
+
+            <!-- Menú Móvil Botón -->
+            <button id="mobile-menu-btn" class="md:hidden text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Menú Móvil Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-lumina-dark text-white z-40 transform translate-x-full transition-transform duration-300 flex flex-col justify-center items-center space-y-8 text-xl font-serif">
+            <button id="close-menu-btn" class="absolute top-8 right-8 text-3xl">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <a href="#destinos" class="mobile-link">Destinos</a>
+            <a href="#experiencias" class="mobile-link">Experiencias</a>
+            <a href="#concierge" class="mobile-link">Concierge</a>
+            <a href="#contacto" class="mobile-link text-lumina-gold">Planificar</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center bg-hero-pattern bg-cover bg-center bg-no-repeat bg-fixed">
+        <div class="absolute inset-0 bg-black/20"></div> <!-- Overlay sutil -->
+        <div class="relative z-10 text-center px-6 max-w-4xl mx-auto text-white">
+            <p class="text-sm md:text-base tracking-[0.3em] uppercase mb-6 reveal">Curaduría de Viajes</p>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif mb-8 leading-tight reveal" style="transition-delay: 200ms;">
+                El arte de <br><span class="italic text-lumina-gold">descubrir</span> el mundo.
+            </h1>
+            <p class="text-lg font-light text-gray-200 mb-10 max-w-2xl mx-auto reveal" style="transition-delay: 400ms;">
+                Creamos itinerarios a medida donde el lujo se encuentra con la autenticidad. Su viaje comienza antes de partir.
+            </p>
+            <div class="reveal" style="transition-delay: 600ms;">
+                <a href="#intro" class="inline-flex flex-col items-center gap-2 text-xs uppercase tracking-widest hover:text-lumina-gold transition-colors duration-300 animate-bounce">
+                    Explorar
+                    <i class="fa-solid fa-arrow-down"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intro / Filosofía -->
+    <section id="intro" class="py-24 md:py-32 bg-lumina-cream text-lumina-dark">
+        <div class="container mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-16 items-center">
+            <div class="reveal">
+                <span class="text-lumina-gold text-xs font-bold tracking-widest uppercase mb-4 block">Nuestra Filosofía</span>
+                <h2 class="text-4xl md:text-5xl font-serif mb-8 leading-tight">Más que un destino,<br>una narrativa personal.</h2>
+                <p class="text-lumina-grey font-light text-lg mb-6 leading-relaxed">
+                    En LUMINA, entendemos que el tiempo es el activo más valioso. Por eso, no vendemos boletos; orquestamos momentos. Desde villas privadas en la Toscana hasta expediciones polares exclusivas.
+                </p>
+                <a href="#" class="text-lumina-dark border-b border-lumina-dark pb-1 text-sm tracking-widest uppercase hover:text-lumina-gold hover:border-lumina-gold transition-all">Leer Manifiesto</a>
+            </div>
+            <div class="relative reveal delay-200">
+                <div class="aspect-[3/4] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2070&auto=format&fit=crop" alt="Luxury Interior" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
+                </div>
+                <!-- Elemento decorativo flotante -->
+                <div class="absolute -bottom-10 -left-10 bg-white p-8 shadow-xl hidden md:block max-w-xs">
+                    <p class="font-serif italic text-xl text-lumina-dark">"El verdadero viaje de descubrimiento no consiste en buscar nuevos paisajes, sino en tener nuevos ojos."</p>
+                    <p class="text-xs text-lumina-grey mt-4 uppercase tracking-widest">— Marcel Proust</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinos Destacados -->
+    <section id="destinos" class="py-24 bg-white">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+                <div>
+                    <span class="text-lumina-gold text-xs font-bold tracking-widest uppercase mb-2 block">Colección 2024</span>
+                    <h2 class="text-4xl font-serif text-lumina-dark">Destinos Exclusivos</h2>
+                </div>
+                <a href="#" class="hidden md:block text-xs uppercase tracking-widest hover:text-lumina-gold transition-colors mt-4 md:mt-0">Ver Toda la Colección &rarr;</a>
+            </div>
+
+            <!-- Grid de Tarjetas -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Card 1 -->
+                <div class="group cursor-pointer reveal">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-6">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1938&auto=format&fit=crop" alt="Bali" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute bottom-6 left-6 z-20 text-white">
+                            <span class="text-xs tracking-widest uppercase border border-white px-3 py-1 mb-2 inline-block backdrop-blur-sm">Indonesia</span>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-serif mb-1 group-hover:text-lumina-gold transition-colors">Ubud, Bali</h3>
+                    <p class="text-sm text-lumina-grey font-light">Retiros espirituales & Villas Privadas</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="group cursor-pointer reveal delay-100">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-6">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=1886&auto=format&fit=crop" alt="Cinque Terre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute bottom-6 left-6 z-20 text-white">
+                            <span class="text-xs tracking-widest uppercase border border-white px-3 py-1 mb-2 inline-block backdrop-blur-sm">Italia</span>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-serif mb-1 group-hover:text-lumina-gold transition-colors">Costa Amalfitana</h3>
+                    <p class="text-sm text-lumina-grey font-light">Navegación en Yate Privado</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="group cursor-pointer reveal delay-200">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-6">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2021&auto=format&fit=crop" alt="Safari" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute bottom-6 left-6 z-20 text-white">
+                            <span class="text-xs tracking-widest uppercase border border-white px-3 py-1 mb-2 inline-block backdrop-blur-sm">Tanzania</span>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-serif mb-1 group-hover:text-lumina-gold transition-colors">Serengeti</h3>
+                    <p class="text-sm text-lumina-grey font-light">Glamping de Ultra-Lujo</p>
+                </div>
+
+            </div>
+            
+            <div class="md:hidden mt-8 text-center">
+                 <a href="#" class="text-xs uppercase tracking-widest hover:text-lumina-gold transition-colors">Ver Toda la Colección &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servicios / Iconos -->
+    <section id="experiencias" class="py-24 bg-lumina-dark text-white">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center divide-y md:divide-y-0 md:divide-x divide-gray-800">
+                
+                <div class="px-4 py-6 reveal group">
+                    <div class="mb-6 text-lumina-gold text-4xl group-hover:-translate-y-2 transition-transform duration-300">
+                        <i class="fa-thin fa-plane-up"></i> <!-- Usando font awesome classes -->
+                        <!-- Fallback SVG si FontAwesome falla -->
+                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                    </div>
+                    <h4 class="text-xl font-serif mb-4">Jets Privados</h4>
+                    <p class="text-gray-400 font-light text-sm leading-relaxed max-w-xs mx-auto">
+                        Acceso a una flota global para llegar a su destino con total privacidad y confort, sin escalas innecesarias.
+                    </p>
+                </div>
+
+                <div class="px-4 py-6 reveal delay-100 group">
+                    <div class="mb-6 text-lumina-gold text-4xl group-hover:-translate-y-2 transition-transform duration-300">
+                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                    </div>
+                    <h4 class="text-xl font-serif mb-4">Concierge 24/7</h4>
+                    <p class="text-gray-400 font-light text-sm leading-relaxed max-w-xs mx-auto">
+                        Un equipo dedicado para gestionar reservas imposibles, eventos privados y cualquier deseo de última hora.
+                    </p>
+                </div>
+
+                <div class="px-4 py-6 reveal delay-200 group">
+                    <div class="mb-6 text-lumina-gold text-4xl group-hover:-translate-y-2 transition-transform duration-300">
+                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </div>
+                    <h4 class="text-xl font-serif mb-4">Acceso Insider</h4>
+                    <p class="text-gray-400 font-light text-sm leading-relaxed max-w-xs mx-auto">
+                        Visitas privadas a museos fuera de horario, cenas con chefs Estrella Michelin y experiencias vetadas al público general.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Simple -->
+    <section class="py-32 bg-lumina-cream">
+        <div class="container mx-auto px-6 text-center reveal">
+            <svg class="w-10 h-10 mx-auto text-lumina-gold mb-8 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V5H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM5.0166 21L5.0166 18C5.0166 16.8954 5.91203 16 7.0166 16H10.0166C10.5689 16 11.0166 15.5523 11.0166 15V9C11.0166 8.44772 10.5689 8 10.0166 8H6.0166C5.46432 8 5.0166 8.44772 5.0166 9V11C5.0166 11.5523 4.56889 12 4.0166 12H3.0166V5H13.0166V15C13.0166 18.3137 10.3303 21 7.0166 21H5.0166Z"></path></svg>
+            <blockquote class="text-2xl md:text-4xl font-serif text-lumina-dark leading-snug max-w-4xl mx-auto mb-8">
+                "Lumina transformó nuestra luna de miel en una obra de arte. Cada detalle fue anticipado, cada momento fue sublime."
+            </blockquote>
+            <cite class="text-sm font-light text-lumina-grey not-italic tracking-widest uppercase">— Victoria & Alejandro, Madrid</cite>
+        </div>
+    </section>
+
+    <!-- Newsletter / Contacto Minimalista -->
+    <section id="contacto" class="py-24 bg-white border-t border-gray-100">
+        <div class="container mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-16">
+            <div class="reveal">
+                <h3 class="text-3xl font-serif text-lumina-dark mb-4">Diseñe su próxima huida.</h3>
+                <p class="text-lumina-grey font-light mb-8">
+                    Déjenos sus datos. Un Travel Designer senior le contactará en menos de 24 horas.
+                </p>
+                <form class="space-y-6">
+                    <div>
+                        <input type="email" placeholder="Correo Electrónico" class="w-full border-b border-gray-300 py-3 focus:outline-none focus:border-lumina-gold transition-colors bg-transparent placeholder-gray-400 font-light">
+                    </div>
+                    <button type="button" class="mt-4 bg-lumina-dark text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-lumina-gold transition-colors duration-300">
+                        Enviar Solicitud
+                    </button>
+                </form>
+            </div>
+            <div class="flex flex-col justify-center space-y-6 md:pl-12 reveal delay-100">
+                <div>
+                    <span class="block text-xs uppercase tracking-widest text-lumina-grey mb-1">Oficina Central</span>
+                    <p class="font-serif text-xl">Paseo de la Reforma, CDMX</p>
+                </div>
+                <div>
+                    <span class="block text-xs uppercase tracking-widest text-lumina-grey mb-1">Contacto Directo</span>
+                    <p class="font-serif text-xl">+52 (55) 1234 5678</p>
+                </div>
+                <div>
+                    <span class="block text-xs uppercase tracking-widest text-lumina-grey mb-1">Social</span>
+                    <div class="flex gap-4 mt-2">
+                        <a href="#" class="text-lumina-dark hover:text-lumina-gold transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-lumina-dark hover:text-lumina-gold transition-colors"><i class="fa-brands fa-pinterest text-xl"></i></a>
+                        <a href="#" class="text-lumina-dark hover:text-lumina-gold transition-colors"><i class="fa-brands fa-linkedin text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-lumina-dark text-white py-12 border-t border-gray-800">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6">
+            <div class="flex items-center gap-2">
+                 <svg width="24" height="24" viewBox="0 0 40 40" fill="none" class="text-lumina-gold">
+                    <path d="M20 0L24.49 15.51L40 20L24.49 24.49L20 40L15.51 24.49L0 20L15.51 15.51L20 0Z" fill="currentColor"/>
+                </svg>
+                <span class="text-lg font-serif tracking-widest font-semibold">LUMINA</span>
+            </div>
+            <div class="text-xs text-gray-500 font-light tracking-wider">
+                &copy; 2024 Lumina Travel Agency. Todos los derechos reservados. <span class="mx-2">|</span> <a href="#" class="hover:text-white">Privacidad</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts JS -->
+    <script>
+        // Navbar Effect on Scroll
+        const navbar = document.getElementById('navbar');
+        const logoText = navbar.querySelector('span');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-white', 'shadow-md', 'text-lumina-dark');
+                navbar.classList.remove('text-white', 'bg-transparent', 'py-6');
+                navbar.classList.add('py-4');
+            } else {
+                navbar.classList.remove('bg-white', 'shadow-md', 'text-lumina-dark', 'py-4');
+                navbar.classList.add('text-white', 'bg-transparent', 'py-6');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+        closeBtn.addEventListener('click', toggleMenu);
+        
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        // Reveal on Scroll Animation
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // Trigger once on load
+        reveal();
+    </script>
+</body>
+</html>
